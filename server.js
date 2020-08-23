@@ -1,12 +1,14 @@
 const mysql = require('mysql2');
 const express = require('express');
 const app = express();
-const inquirer = require('inquirer');
+const router = express.Router();
+const runProgram = require('./lib/index');
 const PORT = process.env.PORT || 3001;
 
 // express middleware
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+app.use("/api", router);
 
 
 const connection = mysql.createConnection({
@@ -15,39 +17,25 @@ const connection = mysql.createConnection({
     password: 'ThorLoki11!99',
 })
 
+createDatabase = () => {
+    connection.query('SOURCE db/schema.sql', () => {
+        console.log('Database generated');
+    })
+}
+
 connection.connect(err => {
     if (err) throw err;
     console.log('Connected!');
-    connectServer()
-    runProgram();
+    connectServer();
+    createDatabase();
 })
-
-function runProgram() {
-
-inquirer 
-    .prompt(
-        {
-            type: 'list',
-            name: 'action',
-            message: 'What would you like to do?',
-            choices: [
-                'View All Departments',
-                'View All Roles',
-                'View All Employees',
-                'Add a Department',
-                'Add a Role',
-                'Add an Employee',
-                'Update an Employee Role'
-            ]
-        },
-        
-    )
-}
 
 function connectServer() {
     app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
+            runProgram();
             });
-        };
+};
 
-module.exports = app;
+
+module.exports = { app, connection, router };
