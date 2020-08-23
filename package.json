@@ -1,0 +1,21 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "inquirer": "^7.3.3",
+    "mysql2": "^2.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "migrate": "mysql db/roster.db < db/schema.sql",
+    "seed": "mysql db/roster.db < db/seeds.sql",
+    "db": "mysql db/roster.db"
+  },
+  "author": "",
+  "license": "ISC"
+}
